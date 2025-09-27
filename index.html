@@ -1,0 +1,320 @@
+<!DOCTYPE html> 
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invitación</title>
+  
+  <!-- Fuentes -->
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f0ecec;
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    .phone {
+      width: 440px;
+      height: 100vh;
+      background: url("background_portada_2.png") no-repeat center center;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      overflow: hidden;
+    }
+
+    .container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    .image {
+      width: 115%;
+      max-width: none;
+      animation: fadeIn 2s ease;
+    }
+
+    .text-access {
+      margin-top: 1.5rem;
+      font-size: 2rem;
+      font-family: 'Great Vibes', cursive;
+      background: linear-gradient(45deg, #d4a373, #e4c2b3, #c58fc0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      cursor: pointer;
+      text-align: center;
+      font-weight: normal;
+      position: relative;
+      animation: float 3s infinite ease-in-out;
+      text-shadow: 0 0 8px rgba(212,163,115,0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .text-access:hover { transform: scale(1.05); }
+
+    .invitation {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      font-size: 1.6rem;
+      text-align: center;
+      color: #7d5a4f;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1.5s ease;
+      padding: 0;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+
+    .invitation.show { opacity: 1; pointer-events: all; }
+
+    .invitation-header { width: 100%; flex-shrink: 0; }
+    .invitation-header img { width: 100%; height: auto; display: block; }
+
+    /* Nueva sección */
+    .invitation-section {
+      position: relative;
+      width: 100%;
+    }
+
+    .invitation-section img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Texto normal debajo del "¡Nos casamos!" */
+    .overlay-text {
+      position: absolute;
+      width: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      font-family: 'Great Vibes', cursive;
+      color: #5a3d2b;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.12);
+      z-index: 7;
+    }
+    .overlay-bottom {
+      top: 60%;
+      font-size: 35px;
+      letter-spacing: 0.6px;
+    }
+
+    /* SVG con texto curvo */
+    .overlay-curve {
+      position: absolute;
+      top: 5%;               /* ajusta si lo quieres más arriba/abajo */
+      left: 50%;
+      transform: translateX(-50%);
+      width: 92%;             /* ancho respecto al contenedor */
+      height: 230px;          /* suficiente para font-size:130 */
+      pointer-events: none;
+      overflow: visible;
+      z-index: 6;
+    }
+
+    .overlay-top {
+      top: 0%;
+    }
+
+    .overlay-bottom {
+      top: 60%;
+    }
+
+/* Imagen más pequeña y centrada */
+.hearts-image {
+  display: block;
+  max-width:55%;   /* controla el tamaño (ajusta 60% o 80% si quieres) */
+  margin: 0 auto;
+}
+
+/* Línea dorada decorativa */
+.gold-line {
+  width: 60%;
+  height: 3px;
+  margin: 1rem auto;  /* separación arriba/abajo */
+  background: linear-gradient(90deg, #b8860b, #ffd700, #b8860b);
+  border-radius: 2px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+/* Texto elegante y romántico, no cursiva */
+.overlay-phrase {
+  position: absolute;
+  top: 85%; /* ajusta si queda muy pegado o separado */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #4b2e25;
+  text-align: center;
+  letter-spacing: 0.5px;
+  line-height: 1.5;
+}
+
+    .invitation-body {
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .audio-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 30px;
+      height: 30px;
+      background-size: contain;
+      cursor: pointer;
+      opacity: 0.8;
+      transition: opacity 0.3s ease;
+      z-index: 9999;
+      pointer-events: auto;
+    }
+
+    .audio-toggle:hover { opacity: 1; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+
+</head>
+<body>
+  <div class="phone">
+    <div class="container">
+      <img src="portada_2_1.png" alt="Invitación" class="image">
+      <div class="text-access" id="access">Presiona para acceder...</div>
+
+      <div class="invitation" id="invitation">
+        <div class="invitation-header">
+          <img src="novios_1.jpg" alt="Header invitación">
+        </div>
+
+<!-- Nueva sección -->
+<div class="invitation-section">
+  <img src="nos_casamos.png" alt="Nos Casamos">
+
+ <svg class="overlay-curve"
+               viewBox="0 0 800 300"
+               xmlns="http://www.w3.org/2000/svg"
+               xmlns:xlink="http://www.w3.org/1999/xlink"
+               aria-hidden="true"
+          >
+            <!--
+              CURVATURAS de ejemplo (elige/ajusta una):
+              - Curva media  -> A 300,300
+              - Curva suave  -> A 400,400  <-- esta está activa
+              - Casi recta   -> A 600,600
+            -->
+            <!-- Arco activo (suave) -->
+            <path id="curve" d="M 80,200 A 400,400 0 0 1 720,200" fill="transparent"/>
+
+            <!-- Si quieres cambiar rápidamente: sustituye la 'd' por:
+                d="M 80,200 A 300,300 0 0 1 720,200"   (curva media)
+                d="M 80,200 A 600,600 0 0 1 720,200"   (muy plana)
+            -->
+
+            <text fill="#5a3d2b"
+                  font-size="100"
+                  font-family="'Great Vibes', cursive"
+                  text-anchor="middle"
+                  dominant-baseline="middle"
+            >
+              <!-- ambos atributos href/xlink:href para compatibilidad -->
+              <textPath href="#curve" xlink:href="#curve" startOffset="50%">
+                Ana &amp; Rubén
+              </textPath>
+            </text>
+          </svg>
+
+  <!-- Texto normal debajo -->
+  <p class="overlay-text overlay-bottom">Con amor infinito</p>
+</div>
+
+<!-- NUEVA SECCIÓN CON FRASE Y CORAZONES -->
+<div class="invitation-section hearts-section">
+      <!-- Línea dorada decorativa -->
+  <div class="gold-line"></div>
+  <img src="frase_2.jpg" alt="Corazones unidos" class="hearts-image">
+
+
+
+  <p class="overlay-text overlay-phrase">
+    <i> Unidos por siempre, atados con amor infinito</i>
+  </p>
+</div>
+
+        <!-- ICONO DE AUDIO -->
+        <div class="audio-toggle" id="audioToggle"></div>
+
+        <!-- AUDIO -->
+        <audio id="weddingMusic" loop>
+          <source src="perfect_ed_sheran.mp3" type="audio/mpeg">
+          Tu navegador no soporta el elemento de audio.
+        </audio>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const accessBtn = document.getElementById('access');
+    const invitation = document.getElementById('invitation');
+    const audio = document.getElementById('weddingMusic');
+    const audioToggle = document.getElementById('audioToggle');
+
+    // ICONOS PARA AUDIO
+    const iconOn = 'icono_sonido.png'; // sonido activo
+    const iconOff = 'icono_sin_sonido.png'; // sonido apagado
+
+    audioToggle.style.backgroundImage = `url(${iconOn})`;
+    let isPlaying = true;
+
+    accessBtn.addEventListener('click', () => {
+      invitation.classList.add('show');
+      audio.play().catch(() => console.log('No se pudo reproducir el audio automáticamente.'));
+    });
+
+    audioToggle.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play();
+        audioToggle.style.backgroundImage = `url(${iconOn})`;
+        isPlaying = true;
+      } else {
+        audio.pause();
+        audioToggle.style.backgroundImage = `url(${iconOff})`;
+        isPlaying = false;
+      }
+    });
+  </script>
+</body>
+</html>
