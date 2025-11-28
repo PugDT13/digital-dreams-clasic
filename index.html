@@ -1,120 +1,63 @@
-<!-- Refactorización completa del código HTML/CSS para mayor limpieza, escalabilidad y mantenibilidad.
-     Funcionalidad conservada al 100%. No se elimina nada funcional. 
-     Se reorganiza la estructura, se eliminan duplicados, se crean utilidades reutilizables y se mejora legibilidad.
-
-     NOTA: Este es un refactor estructural. No incluye JS, pues el original tampoco lo hacía. 
--->
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Invitación</title>
-
-  <!-- Fuentes → centralizadas -->
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet" />
+  
+  <!-- Fuentes (normalizadas, sin duplicados) -->
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
-    /* ============================================
-       VARIABLES, RESET Y BASE
-       ============================================ */
-    :root {
+    /* ===========================
+       Variables y base
+       =========================== */
+    :root{
       --bg: #f0ecec;
       --phone-w: 440px;
       --gold-1: #d4a373;
       --accent-1: #7d5a4f;
       --beige: #f5f1e6;
       --text-dark: #4b2e25;
-      --shadow-rgba: rgba(0, 0, 0, 0.2);
+      --shadow-rgba: rgba(0,0,0,0.2);
       --button-width: 65%;
       --container-padding: 1rem;
-
       --font-heading: 'Great Vibes', cursive;
       --font-serif: 'Playfair Display', serif;
     }
 
-    * {
-      box-sizing: border-box;
+    /* Reset / layout */
+    *{box-sizing: border-box}
+    html,body{height:100%}
+    body {
       margin: 0;
       padding: 0;
-    }
-
-    html,
-    body {
-      height: 100%;
-      width: 100%;
-    }
-
-    body {
+      height: 100vh;
+      width: 100vw;
       display: flex;
       justify-content: center;
       align-items: center;
       background: var(--bg);
       font-family: 'Cormorant Garamond', serif;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
     }
 
-    /* ============================================
-       UTILIDADES (CLASES REUSABLES)
-       ============================================ */
-    .center {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .full-w {
-      width: 100%;
-    }
-
-    .img-fluid {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    .title-wrap {
-      text-align: left;
-      margin-left: 10%;
-      position: relative;
-      display: inline-block;
-      margin-bottom: 1rem;
-    }
-
-    .inv-title {
-      margin: 0;
-      font-size: 2rem;
-      font-weight: bold;
-      color: var(--text-dark);
-    }
-
-    .inv-shadow {
-      position: absolute;
-      top: 1.8rem;
-      left: 60px;
-      margin: 0;
-      font-family: var(--font-heading);
-      font-size: 2.2rem;
-      color: #d9c3a6;
-      opacity: 0.95;
-      pointer-events: none;
-    }
-
-    /* ============================================
-       CONTENEDOR PRINCIPAL (PHONE)
-       ============================================ */
+    /* ===========================
+       Device / canvas
+       =========================== */
     .phone {
       width: var(--phone-w);
       height: 100vh;
-      background: url('background_portada_2.png') no-repeat center/cover;
+      background: url("background_portada_2.png") no-repeat center center;
+      background-size: cover;
       display: flex;
       justify-content: center;
       align-items: center;
       position: relative;
-      overflow: hidden;
       box-shadow: 0 0 20px var(--shadow-rgba);
+      overflow: hidden;
     }
 
     .container {
@@ -130,12 +73,13 @@
 
     .image {
       width: 115%;
+      max-width: none;
       animation: fadeIn 2s ease;
     }
 
-    /* ============================================
-       TEXTO DE ACCESO
-       ============================================ */
+    /* ===========================
+       Access text
+       =========================== */
     .text-access {
       margin-top: 1.5rem;
       font-size: 2rem;
@@ -145,22 +89,24 @@
       -webkit-text-fill-color: transparent;
       cursor: pointer;
       text-align: center;
+      font-weight: normal;
+      position: relative;
       animation: float 3s infinite ease-in-out;
-      text-shadow: 0 0 8px rgba(212, 163, 115, 0.3);
+      text-shadow: 0 0 8px rgba(212,163,115,0.3);
       transition: transform 0.3s ease;
     }
+    .text-access:hover { transform: scale(1.05); }
 
-    .text-access:hover {
-      transform: scale(1.05);
-    }
-
-    /* ============================================
-       INVITACIÓN PRINCIPAL
-       ============================================ */
+    /* ===========================
+       Invitation sheet
+       =========================== */
     .invitation {
       position: absolute;
-      inset: 0;
-      background: #fff;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #ffffff;
       display: flex;
       flex-direction: column;
       font-size: 1.6rem;
@@ -169,53 +115,65 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity 1.2s ease;
+      padding: 0;
       overflow-y: auto;
+      overflow-x: hidden;
     }
-    .invitation.show {
-      opacity: 1;
-      pointer-events: all;
-    }
-
-    .invitation-header img {
-      width: 100%;
-      height: auto;
-      display: block;
+    .invitation.show { 
+      opacity: 1; 
+      pointer-events: all; 
     }
 
-    /* ============================================
-       SECCIONES (REFACTORIZACIÓN)
-       ============================================ */
+    .invitation-header { width: 100%; flex-shrink: 0; }
+    .invitation-header img { width: 100%; height: auto; display: block; }
+
+    /* ===========================
+       Sections & animations
+       =========================== */
     .invitation-section {
-      position: relative;
+      position: relative; /* importante: para posicionamiento absoluto de la imagen */
       width: 100%;
       margin-bottom: 2rem;
+      box-sizing: border-box;
     }
 
-    /* Animaciones estandarizadas */
-    .animated {
+    /* Motion classes kept to preserve behavior */
+    .invitation-section.animated {
       transform: translateX(-120%);
       opacity: 0;
       transition: transform 3.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.9s ease;
       will-change: transform, opacity;
     }
-
-    .invitation.show .animated {
+    .invitation.show .invitation-section.animated {
       transform: translateX(0);
       opacity: 1;
       transition-delay: 0.12s;
     }
 
-    /* Dirección opuesta */
-    .slide-right {
+    .hearts-section.animated {
       transform: translateX(120%);
+      top: -5%;
+      opacity: 0;
+      transition: transform 3.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.9s ease;
     }
-    .invitation.show .slide-right {
+    .invitation.show .hearts-section.animated {
       transform: translateX(0);
+      opacity: 1;
+      transition-delay: 0.12s;
+      margin-bottom: -2%
     }
 
-    /* ============================================
-       TEXTOS SUPERPUESTOS
-       ============================================ */
+    .invitation-section img,
+    .invitation-section .hearts-image {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .nos_casamos_img{
+      width: 5%;
+    }
+
     .overlay-text {
       position: absolute;
       width: 100%;
@@ -224,100 +182,114 @@
       text-align: center;
       font-family: var(--font-heading);
       color: #5a3d2b;
-      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+      text-shadow: 0 2px 6px rgba(0,0,0,0.12);
       z-index: 7;
     }
-
     .overlay-bottom {
       top: 60%;
       font-size: 35px;
+      letter-spacing: 0.6px;
+    }
+
+    .overlay-curve {
+      position: absolute;
+      top: 5%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 92%;
+      height: 230px;
+      pointer-events: none;
+      overflow: visible;
+      z-index: 6;
+    }
+
+    .hearts-image { 
+      max-width: 55%; 
+      margin: 0 auto; 
+      display: block; 
+      margin-top: 8%;
+    }
+
+    .gold-line {
+      width: 60%;
+      height: 3px;
+      margin: 1rem auto;
+      background: linear-gradient(90deg, #b8860b, #ffd700, #b8860b);
+      border-radius: 2px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
     }
 
     .overlay-phrase {
+      position: absolute;
       top: 85%;
-      width: 90%;
       left: 50%;
       transform: translateX(-50%);
+      width: 90%;
       font-family: var(--font-serif);
       font-size: 1.2rem;
       font-weight: 500;
       color: var(--text-dark);
+      text-align: center;
+      letter-spacing: 0.5px;
       line-height: 1.5;
     }
 
-    /* ============================================
-       DECORACIÓN (IMÁGENES)
-       ============================================ */
-    .decor-wrapper {
-      position: relative;
-      width: 100%;
-      height: 0;
-      pointer-events: none;
-    }
-
-    .decor-img {
-      position: absolute;
-      bottom: -70px;
-      opacity: 0.95;
-      filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.12));
-      transform: translateZ(0);
-    }
-
-    .decor-right {
-      right: -10%;
-      width: 36%;
-      max-width: 140px;
-    }
-
-    .decor-left {
-      left: -10%;
-      width: 36%;
-      max-width: 140px;
-    }
-
-    .decor-center {
-      left: 25%;
-      width: 50%;
-      max-width: 200px;
-    }
-
-    .decor-center-small {
-      left: 34%;
-      width: 50%;
-      max-width: 120px;
-    }
-
-    /* ============================================
-       DETALLES DE LA INVITACIÓN
-       ============================================ */
+    /* ===========================
+       Invitation details (personalizada)
+       =========================== */
     .invitation-details {
       font-family: var(--font-serif);
+      margin-top: 1rem;
       padding: 1.5rem;
       text-align: left;
     }
 
-    .inv-hall {
-      text-align: center;
-      font-size: 1.6rem;
+    /* Forzar título alineado a la izquierda, manteniendo semántica original */
+    .invitation-details .title-wrap {
+      text-align: left;
+      margin-left: 10%;
+      position: relative;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+
+    .invitation-details p { margin: 0.8rem 0; }
+
+    .title-wrap .inv-title {
+      margin: 0;
+      font-size: 2rem;
       font-weight: bold;
+      color: #4b2e25;
+      text-align: left;
     }
 
-    .inv-hour {
-      text-align: center;
-      font-size: 1.4rem;
+    .title-wrap .inv-shadow {
+      position: absolute;
+      top: 1.8rem;   
+      left: var(--shadow-offset, 60px);
+      margin: 0;
+      font-family: var(--font-heading);
+      font-size: 2.2rem;
       color: #d9c3a6;
+      opacity: 0.95;
+      pointer-events: none;
     }
 
-    .inv-city,
-    .inv-address {
-      text-align: center;
-      font-size: 1.4rem;
-      color: #000;
-    }
+    .inv-hall { text-align: center; font-size: 1.6rem; font-weight: bold; }
+    .inv-hour { text-align: center; font-size: 1.4rem; color: #d9c3a6; }
+    .dress-code-type { text-align: center; font-size: 1.2rem; color: #000000; }
+    .dress-code-description { text-align: center; font-size: 1.1rem; color: #000000; }
+    .gift-description { text-align: center; font-size: 1rem; color: #000000;  margin-top: 30px !important; margin-bottom: 30px !important; }
+    .photos-description { text-align: center; font-size: 1rem; color: #000000;  margin-top: 200px !important; margin-bottom: 30px !important; }
 
-    /* ============================================
-       BOTONES MAPS Y ACCIONES
-       ============================================ */
+    photos-description
+
+
+    .inv-city, .inv-address { text-align: center; font-size: 1.4rem; color: #000; }
+
+    /* ===========================
+       Maps button (centrado y accesible)
+       =========================== */
     .maps-button {
       font-family: var(--font-serif);
       font-size: 16px;
@@ -325,204 +297,404 @@
       color: #444;
       background-color: var(--beige);
       padding: 8px 20px;
-      border: 1px solid rgba(0, 0, 0, 0.12);
-      display: block;
-      margin: 0.5rem auto;
+      border: 1px solid rgba(0,0,0,0.12);
+      display: block;         /* mantenemos comportamiento de centrado */
+      margin: 0.5rem auto;    /* centrado y separación */
       width: var(--button-width);
-      box-shadow: 4px 6px 0 rgba(0, 0, 0, 0.1);
+      box-shadow: 4px 6px 0 rgba(0, 0, 0, 0.10);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+      text-align: center;
       cursor: pointer;
-      text-align: center;
     }
-
     .maps-button:hover {
-      transform: translate(-1px, -1px);
-      box-shadow: 6px 8px 0 rgba(0, 0, 0, 0.15);
+      transform: translate(-1px,-1px);
+      box-shadow: 6px 8px 0 rgba(0,0,0,0.15);
+
     }
 
-    /* ============================================
-       FRASES / QUOTES
-       ============================================ */
-    .feature-quote {
-      position: relative;
+    /* ===========================
+       Decor positioning: image emerges from right, subtle and borderless
+       =========================== */
+    .decor-wrapper {
+      position: relative; /* contenedor relativo para que la imagen pueda posicionarse fuera a la derecha */
       width: 100%;
-      padding: 2rem 1rem;
-      margin: 3rem auto;
-      text-align: center;
+      height: 0; /* no ocupa espacio en flujo */
+      pointer-events: none;
     }
 
-    .quote-box {
-      background: var(--beige);
-      padding: 2.5rem 2rem;
-      font-family: var(--font-serif);
-      font-size: 1.1rem;
-      line-height: 1.6;
-      color: #3e2d20;
-      border-radius: 4px;
-      position: relative;
-      z-index: 2;
-    }
-
-    .quote-outline {
+    .decor-image-left {
       position: absolute;
-      top: 10px;
-      left: 10px;
-      right: 10px;
-      bottom: 10px;
-      border: 1.5px solid #000;
-      z-index: 1;
+      bottom: -70px;            /* alineada al fondo de la sección */
+      width: 10%;           /* controla el tamaño visible */
+      max-width: 70px;
+      opacity: 0.95;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.12));
+      border-radius: 0;     /* sin bordes */
+      pointer-events: none; /* para que no interfiera con clics */
+      display: block;
+      transform: translateZ(0); /* mejora rendimiento de composición */
+    }
+    .decor-image-left-size-ii {
+      position: absolute;
+      bottom: -70px;            /* alineada al fondo de la sección */
+      width: 10%;           /* controla el tamaño visible */
+      max-width: 100px;
+      opacity: 0.95;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.12));
+      border-radius: 0;     /* sin bordes */
+      pointer-events: none; /* para que no interfiera con clics */
+      display: block;
+      transform: translateZ(0); /* mejora rendimiento de composición */
     }
 
-    /* ============================================
-       CARRUSEL DE FOTOS
-       ============================================ */
+    
+
+    .decor-image-left-basic{
+      position: absolute;
+      bottom: -170px;            /* alineada al fondo de la sección */
+      width: 36%;           /* controla el tamaño visible */
+      max-width: 140px;
+      opacity: 0.95;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.12));
+      border-radius: 0;     /* sin bordes */
+      pointer-events: none; /* para que no interfiera con clics */
+      display: block;
+      transform: translateZ(0); /* mejora rendimiento de composición */
+    }
+
+    .decor-image-center {
+      position: absolute;
+      width: 50%;           /* controla el tamaño visible */
+      max-width: 200px;
+      opacity: 0.95;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.12));
+      border-radius: 0;     /* sin bordes */
+      pointer-events: none; /* para que no interfiera con clics */
+      display: block;
+      transform: translateZ(0); /* mejora rendimiento de composición */
+      left: 23%;    }
+
+    .decor-image-center-smaller {
+      position: absolute;
+      width: 50%;           /* controla el tamaño visible */
+      max-width: 120px;
+      opacity: 0.95;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.12));
+      border-radius: 0;     /* sin bordes */
+      pointer-events: none; /* para que no interfiera con clics */
+      display: block;
+      transform: translateZ(0); /* mejora rendimiento de composición */
+      left: 34%;    
+    }
+
+    .decor-image-right {
+      position: absolute;
+      right: -10%;          /* sale desde la derecha (ajusta si quieres más/menos salida) */
+      bottom: -110px;            /* alineada al fondo de la sección */
+      width: 36%;           /* controla el tamaño visible */
+      max-width: 140px;
+      opacity: 0.95;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.12));
+      border-radius: 0;     /* sin bordes */
+      pointer-events: none; /* para que no interfiera con clics */
+      display: block;
+      transform: translateZ(0); /* mejora rendimiento de composición */
+    }
+
+    .decor-wrapper-right-size-ii {
+      position: absolute;
+      right: 10%;          /* sale desde la derecha (ajusta si quieres más/menos salida) */
+      width: 20%;           /* controla el tamaño visible */
+      max-width: 140px;
+      opacity: 0.95;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.12));
+      border-radius: 0;     /* sin bordes */
+      pointer-events: none; /* para que no interfiera con clics */
+      display: block;
+      transform: translateZ(0); /* mejora rendimiento de composición */
+    }
+
+    /* ===========================
+       Decor image original fallback (no usada cuando se usa la derecha)
+       =========================== */
+    .decor-image {
+      width: 70%;
+      margin: 0 auto;
+      display: none; /* ocultamos la versión antigua para evitar confusión */
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(217,195,166,0.5);
+    }
+
+    .itinerary-container {
+        width: 100%;
+        margin-top: 2rem;
+        text-align: center;
+        font-family: 'Playfair Display', serif;
+    }
+
+    .itinerary-hour {
+        font-size: 2.2rem;
+        font-style: italic;
+        color: #000;
+        margin: 0;
+    }
+
+    .itinerary-line {
+        width: 55%;
+        height: 4px;
+        background: #e6dec7;
+        margin: 0.4rem auto 0.8rem auto;
+        border-radius: 4px;
+    }
+
+    .itinerary-name {
+        font-size: 1rem;
+        letter-spacing: 2px;
+        color: #000;
+        margin: 0;
+        font-weight: 500;
+    }
+    .feature-quote {
+    position: relative;
+    width: 100%;
+    padding: 2rem 1rem;
+    margin: 3rem auto;
+    text-align: center;
+    top: 4%;
+    }
+
+    .feature-quote--first {
+      margin-top: 0.1rem !important; /* Ajusta el número según lo pegado que lo quieras */
+      top: 0 !important;             /* Elimina el desplazamiento hacia abajo */
+    }
+
+
+
+    .feature-quote .quote-box {
+    background: var(--beige);
+    padding: 2.5rem 2rem;
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #3e2d20;
+    border-radius: 4px;
+    position: relative;
+    z-index: 2;
+    }
+
+
+    .feature-quote .quote-outline {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border: 1.5px solid #000;
+    z-index: 1;
+    }
+
+    .audio-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 30px;
+      height: 30px;
+      background-size: contain;
+      cursor: pointer;
+      opacity: 0.8;
+      transition: opacity 0.3s ease;
+      z-index: 9999;
+      pointer-events: auto;
+    }
+    .audio-toggle:hover { opacity: 1; }
+
+    /* ===========================
+       Romantic Carousel - FIXED
+       =========================== */
+
     .carousel-container {
       width: 100%;
-      height: 260px;
-      overflow: hidden;
+      height: 260px;              /* Ajustable según diseño */
+      overflow: hidden;           /* evita que las imágenes se salgan */
       position: relative;
       background: transparent;
       margin-top: 50px;
     }
 
+    /* El track es flexible y cada imagen ocupará 100% del ancho del contenedor */
     .carousel-track {
       display: flex;
       width: 100%;
       height: 100%;
-      transition: transform 2s cubic-bezier(.22, .9, .35, 1);
+      transition: transform 2s cubic-bezier(.22,.9,.35,1);
       will-change: transform;
     }
 
+    /* Cada imagen directa en el track ocupará exactamente el ancho del contenedor */
     .carousel-track img {
       flex: 0 0 100%;
       width: 100%;
       height: 100%;
-      object-fit: cover;
-    }
-
-    /* ============================================
-       COUNTDOWN
-       ============================================ */
-    .countdown-section {
-      text-align: center;
-      margin: 1rem 0 3rem 0;
-      font-family: var(--font-serif);
-      color: var(--text-dark);
-    }
-
-    .countdown-title {
-      font-family: var(--font-heading);
-      font-size: 2.4rem;
-      margin-bottom: 1.2rem;
-      color: var(--accent-1);
-    }
-
-    .countdown-timer {
-      display: flex;
-      justify-content: center;
-      gap: 1.4rem;
-    }
-
-    .cd-box {
-      background: var(--beige);
-      padding: 1rem 0.8rem;
-      border-radius: 6px;
-      width: 65px;
-      box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.15);
-    }
-
-    .cd-box span {
+      object-fit: cover; /* ajusta recorte para cubrir sin deformar */
       display: block;
-      font-size: 1.8rem;
-      font-weight: bold;
-      color: var(--accent-1);
     }
 
-    .cd-box p {
-      margin: 0;
-      font-size: 0.8rem;
-      color: #000;
+    /* Indicadores / controles opcionales (no obligatorios) */
+    .carousel-indicators {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 8px;
+      display: flex;
+      gap: 6px;
+      z-index: 12;
+      opacity: 0;
+    }
+    .carousel-indicators button {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255,255,255,0.7);
+      opacity: 0.8;
+      cursor: pointer;
+    }
+    .carousel-indicators button.active {
+      background: rgba(0,0,0,0.6);
     }
 
-    /* ============================================
-       ANIMACIONES
-       ============================================ */
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: scale(0.95);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
+.qr-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem 0;
+}
+
+.qr-container img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
+
+/* ===========================
+   Countdown Section
+   =========================== */
+.countdown-section {
+  text-align: center;
+  margin-top: 1rem;
+  margin-bottom: 3rem;
+  font-family: var(--font-serif);
+  color: var(--text-dark);
+}
+
+.countdown-title {
+  font-family: var(--font-heading);
+  font-size: 2.4rem;
+  margin-bottom: 1.2rem;
+  color: var(--accent-1);
+}
+
+.countdown-timer {
+  display: flex;
+  justify-content: center;
+  gap: 1.4rem;
+}
+
+.cd-box {
+  background: var(--beige);
+  padding: 1rem 0.8rem;
+  border-radius: 6px;
+  width: 65px;
+  box-shadow: 0px 3px 8px rgba(0,0,0,0.15);
+}
+
+.cd-box span {
+  display: block;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--accent-1);
+}
+
+.cd-box p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #000;
+}
+
+    /* ===========================
+       Animations
+       =========================== */
+    @keyframes fadeIn { 
+      from { opacity: 0; transform: scale(0.95); } 
+      to { opacity: 1; transform: scale(1); } 
+    }
+    @keyframes float { 
+      0%, 100% { transform: translateY(0); } 
+      50% { transform: translateY(-6px); } 
     }
 
-    @keyframes float {
-      0%,
-      100% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-6px);
-      }
+    /* Responsive pequeño ajuste (opcional, no cambia funcionalidad) */
+    @media (max-width:480px){
+      .phone{width:100vw}
+      :root{--button-width:80%}
+      .decor-image-right{ display:none } /* ocultar en pantallas muy pequeñas para no tapar contenido */
     }
 
-    /* ============================================
-       RESPONSIVE
-       ============================================ */
-    @media (max-width: 480px) {
-      .phone {
-        width: 100vw;
-      }
-      :root {
-        --button-width: 80%;
-      }
-      .decor-right {
-        display: none;
-      }
-    }
   </style>
-</head>
 
+</head>
 <body>
   <div class="phone">
     <div class="container">
-      <img src="portada_2_1_1.jpg" alt="Invitación" class="image" />
+      <img src="portada_2_1_1.jpg" alt="Invitación" class="image">
       <div class="text-access" id="access">Presiona para acceder...</div>
 
       <div class="invitation" id="invitation">
         <div class="invitation-header">
-          <img src="novios_1_1.jpg" alt="Header invitación" />
+          <img src="novios_1_1.jpg" alt="Header invitación">
         </div>
 
-        <!-- Sección 1 -->
+        <!-- Primera sección -->
         <div class="invitation-section animated">
-          <img src="nos_casamos.png" alt="Nos Casamos" style="width: 5%" />
+          <img src="nos_casamos.png" alt="Nos Casamos" class="nos_casamos_img">
 
-          <svg class="overlay-curve" viewBox="0 0 800 300" aria-hidden="true">
-            <path id="curve" d="M 80,200 A 400,400 0 0 1 720,200" fill="transparent" />
-            <text fill="#5a3d2b" font-size="100" font-family="var(--font-heading)" text-anchor="middle">
-              <textPath href="#curve" startOffset="50%">Ana & Rubén</textPath>
+          <svg class="overlay-curve"
+                viewBox="0 0 800 300"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                aria-hidden="true">
+            <path id="curve" d="M 80,200 A 400,400 0 0 1 720,200" fill="transparent"/>
+            <text fill="#5a3d2b"
+                  font-size="100"
+                  font-family="'Great Vibes', cursive"
+                  text-anchor="middle"
+                  dominant-baseline="middle">
+              <textPath href="#curve" xlink:href="#curve" startOffset="50%">
+                Ana &amp; Rubén
+              </textPath>
             </text>
           </svg>
-
           <p class="overlay-text overlay-bottom">12-11-2025</p>
         </div>
 
-        <!-- Frase -->
-        <div class="invitation-section animated feature-quote">
-          <div class="quote-box">Una hermosa y maravillosa historia comienza...</div>
-          <div class="quote-outline"></div>
+<div class="invitation-section animated feature-quote feature-quote--first">
+  <div class="quote-box">
+    Una hermosa y maravillosa historia comienza...
+  </div>
+  <div class="quote-outline"></div>
+</div>
+
+        <!-- Segunda sección -->
+        <div class="invitation-section hearts-section animated">
+
+          <img src="frase_2.png" alt="Corazones unidos" class="hearts-image">
+          <p class="overlay-text overlay-phrase">
+            <i> Unidos por siempre, atados con amor infinito</i>
+          </p>
         </div>
 
-        <!-- Sección 2 -->
-        <div class="invitation-section animated slide-right">
-          <img src="frase_2.png" alt="Corazones unidos" class="img-fluid" style="max-width: 55%; margin: 8% auto 0" />
-          <p class="overlay-text overlay-phrase"><i>Unidos por siempre, atados con amor infinito</i></p>
-        </div>
-
-        <!-- Ceremonia -->
+        
         <div class="invitation-section animated invitation-details">
           <div class="title-wrap">
             <p class="inv-title">Ceremonia</p>
@@ -534,14 +706,16 @@
           <p class="inv-city">Ciudad de México</p>
           <p class="inv-address">Av. Siempre Viva 123, Col. Centro</p>
 
-          <a href="https://maps.google.com/?q=Av.+Siempre+Viva+123,+Ciudad+de+México" target="_blank" class="maps-button">Click para acceder en Maps</a>
+          <a href="https://maps.google.com/?q=Av.+Siempre+Viva+123,+Ciudad+de+México" target="_blank" class="maps-button" id="mapsLink">
+            Click para acceder en Maps
+          </a>
 
-          <div class="decor-wrapper">
-            <img src="flor_2.png" alt="Decoración elegante" class="decor-img decor-right" />
+          <!-- wrapper vacío en flujo; imagen posicionada fuera a la derecha -->
+          <div class="decor-wrapper" aria-hidden="true">
+            <img src="flor_2.png" alt="Decoración elegante" class="decor-image-right">
           </div>
         </div>
 
-        <!-- Recepción -->
         <div class="invitation-section animated invitation-details">
           <div class="title-wrap">
             <p class="inv-title">Recepción</p>
@@ -553,106 +727,424 @@
           <p class="inv-city">Ciudad de México</p>
           <p class="inv-address">Av. Siempre Benito Juarez 10, Col. Arboledas</p>
 
-          <a href="https://maps.google.com/?q=Av.+Siempre+Viva+123,+Ciudad+de+México" target="_blank" class="maps-button">Click para acceder en Maps</a>
+          <a href="https://maps.google.com/?q=Av.+Siempre+Viva+123,+Ciudad+de+México" target="_blank" class="maps-button" id="mapsLink">
+            Click para acceder en Maps
+          </a>
 
-          <div class="decor-wrapper">
-            <img src="rosa.png" alt="Decoración elegante" class="decor-img decor-left" />
+          <!-- wrapper vacío en flujo; imagen posicionada fuera a la derecha -->
+          <div class="decor-wrapper" aria-hidden="true">
+            <img src="rosa.png" alt="Decoración elegante" class="decor-image-left">
           </div>
         </div>
 
-        <!-- Código de vestimenta -->
         <div class="invitation-section animated invitation-details">
           <div class="title-wrap">
             <p class="inv-title">Código de vestimenta</p>
             <p class="inv-shadow">Código de vestimenta</p>
           </div>
+          <p class="dress-code-type">FORMAL</p>
+          <p class="dress-code-description">Color blanco está reservado para los novios, ¡Nos encantaría verte en otros colores!</p>
 
-          <p class="dress-code-type" style="text-align: center; font-size: 1.2rem">FORMAL</p>
-          <p class="dress-code-description" style="text-align: center; font-size: 1.1rem">Color blanco está reservado para los novios, ¡Nos encantaría verte en otros colores!</p>
 
-          <div class="decor-wrapper">
-            <img src="dress_code.png" alt="Decoración elegante" class="decor-img decor-center" />
+          <!-- wrapper vacío en flujo; imagen posicionada fuera a la derecha -->
+          <div class="decor-wrapper" aria-hidden="true">
+            <img src="dress_code.png" alt="Decoración elegante" class="decor-image-center">
           </div>
         </div>
 
-        <!-- Quote -->
-        <div class="invitation-section animated feature-quote">
-          <div class="quote-box">
-            Queremos que seas testigo de nuestro amor<br />¡Acompáñanos en este día tan especial!
-          </div>
-          <div class="quote-outline"></div>
-        </div>
+          <!-- wrapper vacío en flujo; imagen posicionada fuera a la derecha 
+          <div class="decor-wrapper" aria-hidden="true">
+            <img src="colocar una imagen decorativa" alt="Decoración elegante" class="decor-image-left-basic">
+          </div>-->
 
-        <!-- Confirmación -->
+<div class="invitation-section animated feature-quote">
+<div class="quote-box">
+Queremos que seas testigo de nuestro amor<br>
+¡Acompáñanos en este día tan especial!
+</div>
+<div class="quote-outline"></div>
+</div>
+
         <div class="invitation-section animated invitation-details">
           <div class="title-wrap">
             <p class="inv-title">Confirma tu asistencia</p>
             <p class="inv-shadow">Confirma tu asistencia</p>
           </div>
-
-          <div class="decor-wrapper" style="margin-top: 10px; margin-bottom: 105px">
-            <img src="letter_1.png" alt="Decoración elegante" class="decor-img decor-center-small" />
+          <!-- wrapper vacío en flujo; imagen posicionada fuera a la derecha -->
+          <div class="decor-wrapper" aria-hidden="true" style="margin-bottom:105px;margin-top:10px">
+            <img src="letter_1.png" alt="Decoración elegante" class="decor-image-center-smaller">
           </div>
-
-          <a href="https://maps.google.com/?q=Av.+Siempre+Viva+123,+Ciudad+de+México" target="_blank" class="maps-button">Click para confirmar asistencia</a>
-
-          <div class="decor-wrapper">
-            <img src="flor_2.png" alt="Decoración elegante" class="decor-img decor-right" />
+          <a href="https://maps.google.com/?q=Av.+Siempre+Viva+123,+Ciudad+de+México" target="_blank" class="maps-button" id="mapsLink">
+            Click para confirmar asistencia
+          </a>
+          <div class="decor-wrapper" aria-hidden="true">
+            <img src="flor_2.png" alt="Decoración elegante" class="decor-image-right">
           </div>
         </div>
 
-        <!-- Itinerario -->
+<div class="invitation-section animated invitation-details">
+    <div class="title-wrap">
+        <p class="inv-title">Itinerario</p>
+        <p class="inv-shadow">Itinerario</p>
+    </div>
+
+    <div class="itinerary-container">
+
+        <div class="itinerary-item">
+            <p class="itinerary-hour">18:00 h</p>
+            <div class="itinerary-line"></div>
+            <p class="itinerary-name">CEREMONIA</p>
+        </div>
+
+        <div class="itinerary-item">
+            <p class="itinerary-hour">19:00 h</p>
+            <div class="itinerary-line"></div>
+            <p class="itinerary-name">RECEPCIÓN</p>
+        </div>
+
+        <div class="itinerary-item">
+            <p class="itinerary-hour">20:00 h</p>
+            <div class="itinerary-line"></div>
+            <p class="itinerary-name">BANQUETE</p>
+        </div>
+
+        <div class="itinerary-item">
+            <p class="itinerary-hour">21:30 h</p>
+            <div class="itinerary-line"></div>
+            <p class="itinerary-name">FIESTA</p>
+        </div>
+
+    </div>
+
+          <div class="decor-wrapper" aria-hidden="true">
+            <img src="wine.png" alt="Decoración elegante" class="decor-image-left-size-ii">
+          </div>
+
+</div>
+
+    <div class="invitation-section animated">
+      <div class="carousel-container" aria-label="Carrusel de fotos">
+        <div class="carousel-track">
+          <!-- Mantengo tus 5 imágenes originales; cada una ocupará 100% del ancho del contenedor -->
+          <img src="novios_2.jpeg" alt="">
+          <img src="novios_3.jpg" alt="">
+          <img src="novios_4.jpg" alt="">
+          <img src="novios_5.jpg" alt="">
+          <img src="novios_6.jpg" alt="">
+        </div>
+
+        <!-- indicadores visuales (opcionales, se actualizan desde JS) -->
+        <div class="carousel-indicators" aria-hidden="true"></div>
+      </div>
+    </div>
+
         <div class="invitation-section animated invitation-details">
           <div class="title-wrap">
-            <p class="inv-title">Itinerario</p>
-            <p class="inv-shadow">Itinerario</p>
+            <p class="inv-title">Regalos</p>
+            <p class="inv-shadow">Regalos</p>
           </div>
-
-          <div class="itinerary-container" style="text-align: center; font-family: var(--font-serif)">
-            <div class="itinerary-item">
-              <p class="itinerary-hour" style="font-size: 2.2rem">18:00 h</p>
-              <div class="itinerary-line" style="width: 55%; height: 4px; background: #e6dec7; margin: 0.4rem auto"></div>
-              <p class="itinerary-name">CEREMONIA</p>
-            </div>
-
-            <div class="itinerary-item">
-              <p class="itinerary-hour" style="font-size: 2.2rem">19:00 h</p>
-              <div class="itinerary-line" style="width: 55%; height: 4px; background: #e6dec7; margin: 0.4rem auto"></div>
-              <p class="itinerary-name">RECEPCIÓN</p>
-            </div>
-
-            <div class="itinerary-item">
-              <p class="itinerary-hour" style="font-size: 2.2rem">20:00 h</p>
-              <div class="itinerary-line" style="width: 55%; height: 4px; background: #e6dec7; margin: 0.4rem auto"></div>
-              <p class="itinerary-name">BANQUETE</p>
-            </div>
-
-            <div class="itinerary-item">
-              <p class="itinerary-hour" style="font-size: 2.2rem">21:30 h</p>
-              <div class="itinerary-line" style="width: 55%; height: 4px; background: #e6dec7; margin: 0.4rem auto"></div>
-              <p class="itinerary-name">FIESTA</p>
-            </div>
+          <p class="gift-description">Nuestro regalo más valioso será tu presencia.<br>Si deseas contribuir con un apoyo económico, agredeceríamos lo transfieras a la siguiente cuenta:</p>
+          <a class="maps-button" id="clabeAccount">
+            00192619283692161
+          </a>
+          <div class="decor-wrapper-right-size-ii" aria-hidden="true">
+            <img src="gift.png" alt="Decoración elegante" class="decor-image-right">
           </div>
         </div>
 
-        <!-- QR -->
-        <div class="qr-container center">
-          <img src="qr.png" alt="QR code" style="width: 100px; height: 100px" />
-        </div>
 
-        <!-- Countdown -->
-        <div class="countdown-section">
-          <p class="countdown-title">Falta...</p>
-          <div class="countdown-timer">
-            <div class="cd-box"><span id="cd-days">00</span><p>Días</p></div>
-            <div class="cd-box"><span id="cd-hours">00</span><p>Hrs</p></div>
-            <div class="cd-box"><span id="cd-min">00</span><p>Min</p></div>
-            <div class="cd-box"><span id="cd-sec">00</span><p>Seg</p></div>
+        <div class="invitation-section animated invitation-details">
+          <div class="title-wrap">
+            <p class="inv-title">Álbum de fotos</p>
+            <p class="inv-shadow">Álbum de fotos</p>
           </div>
+          <p class="gift-description">¡Ayúdanos a capturar cada instante!</p>
+          <!-- wrapper vacío en flujo; imagen posicionada fuera a la derecha -->
+          <div class="decor-wrapper" aria-hidden="true">
+            <img src="party.png" alt="Party Selfie" class="decor-image-center">
+          </div>
+          <p class="photos-description">¡Escanea el código QR proporcionado a continuación y compártenos todas las fotos que tomaste!</p>
+<div class="qr-container">
+  <img 
+    src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=Hola%20Mundo" 
+    alt="Código QR" 
+    class="qr-image"
+  >
+</div>
+
+
         </div>
 
-      </div> <!-- cierre invitation -->
+
+<!-- Cuenta regresiva -->
+<div class="invitation-section animated countdown-section">
+  <p class="countdown-title">Espera con nosotros...</p>
+
+  <div class="countdown-timer">
+    <div class="cd-box">
+      <span id="cd-days">00</span>
+      <p>Días</p>
+    </div>
+    <div class="cd-box">
+      <span id="cd-hours">00</span>
+      <p>Horas</p>
+    </div>
+    <div class="cd-box">
+      <span id="cd-minutes">00</span>
+      <p>Mins</p>
+    </div>
+    <div class="cd-box">
+      <span id="cd-seconds">00</span>
+      <p>Segs</p>
     </div>
   </div>
+</div>
+</div>
+
+        <!-- ICONO DE AUDIO -->
+        <div class="audio-toggle" id="audioToggle" aria-label="Alternar audio"></div>
+
+        <!-- AUDIO -->
+        <audio id="weddingMusic" loop>
+          <source src="perfect_ed_sheran.mp3" type="audio/mpeg">
+          Tu navegador no soporta el elemento de audio.
+        </audio>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ---------------------------
+       Módulo pequeño y extensible (audio + acceso)
+       - conserva los IDs originales
+       --------------------------- */
+    (function(){
+      'use strict';
+
+      // Referencias DOM (único lugar donde se obtienen)
+      const refs = {
+        accessBtn: document.getElementById('access'),
+        invitation: document.getElementById('invitation'),
+        audio: document.getElementById('weddingMusic'),
+        audioToggle: document.getElementById('audioToggle'),
+        mapsLink: document.getElementById('mapsLink'),
+      };
+
+      // Recursos / constantes
+      const ICON_ON = 'icono_sonido.png';
+      const ICON_OFF = 'icono_sin_sonido.png';
+
+      // Estado (encapsulado)
+      const state = {
+        isPlaying: true
+      };
+
+      // Inicializador: asigna icono y listeners
+      function init(){
+        if(refs.audioToggle) refs.audioToggle.style.backgroundImage = `url(${ICON_ON})`;
+
+        attachListeners();
+      }
+
+      // Listeners organizados en funciones para fácil extensión
+      function attachListeners(){
+        if(refs.accessBtn) {
+          refs.accessBtn.addEventListener('click', handleAccessClick);
+        }
+
+        if(refs.audioToggle) {
+          refs.audioToggle.addEventListener('click', handleAudioToggleClick);
+        }
+
+        // Si necesitas más listeners en el futuro, añadelos aquí.
+      }
+
+      // Mostrar invitación y reproducir audio
+      function handleAccessClick(ev){
+        if(refs.invitation){
+          refs.invitation.classList.add('show');
+        }
+        // Intentamos reproducir; mantenemos el catch idéntico al original.
+        if(refs.audio){
+          refs.audio.play().catch(() => console.log('No se pudo reproducir el audio automáticamente.'));
+          state.isPlaying = !refs.audio.paused;
+        }
+      }
+
+      // Toggle de audio con encapsulado de comportamiento
+      function handleAudioToggleClick(ev){
+        if(!refs.audio) return;
+
+        if(refs.audio.paused){
+          playAudio();
+        } else {
+          pauseAudio();
+        }
+      }
+
+      function playAudio(){
+        refs.audio.play()
+          .then(()=> {
+            state.isPlaying = true;
+            if(refs.audioToggle) refs.audioToggle.style.backgroundImage = `url(${ICON_ON})`;
+          })
+          .catch(() => {
+            console.log('No se pudo reproducir el audio automáticamente.');
+            state.isPlaying = !refs.audio.paused;
+          });
+      }
+
+      function pauseAudio(){
+        refs.audio.pause();
+        state.isPlaying = false;
+        if(refs.audioToggle) refs.audioToggle.style.backgroundImage = `url(${ICON_OFF})`;
+      }
+
+      window.__InvitationModule = {
+        playAudio,
+        pauseAudio,
+        refs,
+        state
+      };
+
+      if(document.readyState === 'loading'){
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+
+    })();
+
+      document.getElementById("clabeAccount").addEventListener("click", function (event) {
+    event.preventDefault(); // evita que se abra un enlace vacío
+    
+    const numberToCopy = this.textContent.trim();
+    navigator.clipboard.writeText(numberToCopy)
+      .then(() => {
+        // feedback opcional
+        this.textContent = "¡Copiado!";
+        setTimeout(() => {
+          this.textContent = numberToCopy;
+        }, 1200);
+      })
+      .catch(() => alert("No se pudo copiar."));
+  });
+  </script>
+
+  <script>
+    /* ===========================
+       Carrusel JS (simple, robusto)
+       - ajusta el transform del track para mostrar cada imagen 100%
+       - crea indicadores y los sincroniza
+       - pausa cuando el usuario entra con foco (mejora accesibilidad)
+       =========================== */
+
+    (function(){
+      const carousel = document.querySelector('.carousel-container');
+      if(!carousel) return;
+
+      const track = carousel.querySelector('.carousel-track');
+      const slides = Array.from(track.querySelectorAll('img'));
+      const indicatorsWrap = carousel.querySelector('.carousel-indicators');
+
+      let current = 0;
+      const total = slides.length;
+      const intervalMs = 4500;
+      let timer = null;
+      let isPaused = false;
+
+      // Crear indicadores
+      for(let i=0;i<total;i++){
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        if(i === 0) btn.classList.add('active');
+        btn.addEventListener('click', () => {
+          goTo(i);
+          restartTimer();
+        });
+        indicatorsWrap.appendChild(btn);
+      }
+      const indicators = Array.from(indicatorsWrap.children);
+
+      function updateIndicators(){
+        indicators.forEach((b,idx) => {
+          b.classList.toggle('active', idx === current);
+        });
+      }
+
+      function goTo(idx){
+        current = idx % total;
+        track.style.transform = `translateX(-${current * 100}%)`;
+        updateIndicators();
+      }
+
+      function next(){
+        goTo((current + 1) % total);
+      }
+
+      function restartTimer(){
+        clearInterval(timer);
+        timer = setInterval(() => { if(!isPaused) next(); }, intervalMs);
+      }
+
+      // Pausar cuando el usuario hace hover o focus dentro del carrusel
+      carousel.addEventListener('mouseenter', () => { isPaused = true; });
+      carousel.addEventListener('mouseleave', () => { isPaused = false; });
+      carousel.addEventListener('focusin', () => { isPaused = true; });
+      carousel.addEventListener('focusout', () => { isPaused = false; });
+
+      // Inicializar (garantiza que las imágenes se muestren correctamente incluso si tardan en cargar)
+      // Forzamos el tamaño del track según cantidad (no necesario con flex pero ayuda cuando hay edge cases)
+      // (Dejamos el track flexible y usamos transform para moverse)
+      goTo(0);
+      restartTimer();
+
+      // Ajuste de accesibilidad: detener al cambiar de pestaña
+      document.addEventListener('visibilitychange', () => {
+        if(document.hidden) { isPaused = true; }
+        else { isPaused = false; }
+      });
+
+      // Manejo de redimensionamiento: por si el contenedor cambia de tamaño
+      window.addEventListener('resize', () => {
+        // forzamos repaint para evitar glitches
+        track.style.transition = 'none';
+        track.style.transform = `translateX(-${current * 100}%)`;
+        requestAnimationFrame(()=> {
+          track.style.transition = '';
+        });
+      });
+    })();
+
+    const weddingDate = new Date("2026-11-12T00:00:00");
+
+function updateCountdown() {
+  const now = new Date();
+  const diff = weddingDate - now;
+
+  if (diff <= 0) {
+    document.querySelector(".countdown-title").textContent = "¡Hoy es el gran día!";
+    document.getElementById("cd-days").textContent = "00";
+    document.getElementById("cd-hours").textContent = "00";
+    document.getElementById("cd-minutes").textContent = "00";
+    document.getElementById("cd-seconds").textContent = "00";
+    return;
+  }
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+
+  document.getElementById("cd-days").textContent = String(days).padStart(2, "0");
+  document.getElementById("cd-hours").textContent = String(hours).padStart(2, "0");
+  document.getElementById("cd-minutes").textContent = String(minutes).padStart(2, "0");
+  document.getElementById("cd-seconds").textContent = String(seconds).padStart(2, "0");
+}
+
+setInterval(updateCountdown, 1000);
+updateCountdown();
+  </script>
+
 </body>
 </html>
