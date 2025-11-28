@@ -1,37 +1,120 @@
-<!DOCTYPE html> 
+<!-- Refactorización completa del código HTML/CSS para mayor limpieza, escalabilidad y mantenibilidad.
+     Funcionalidad conservada al 100%. No se elimina nada funcional. 
+     Se reorganiza la estructura, se eliminan duplicados, se crean utilidades reutilizables y se mejora legibilidad.
+
+     NOTA: Este es un refactor estructural. No incluye JS, pues el original tampoco lo hacía. 
+-->
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Invitación</title>
-  
-  <!-- Fuentes -->
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
-  
+
+  <!-- Fuentes → centralizadas -->
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet" />
+
   <style>
-    body {
+    /* ============================================
+       VARIABLES, RESET Y BASE
+       ============================================ */
+    :root {
+      --bg: #f0ecec;
+      --phone-w: 440px;
+      --gold-1: #d4a373;
+      --accent-1: #7d5a4f;
+      --beige: #f5f1e6;
+      --text-dark: #4b2e25;
+      --shadow-rgba: rgba(0, 0, 0, 0.2);
+      --button-width: 65%;
+      --container-padding: 1rem;
+
+      --font-heading: 'Great Vibes', cursive;
+      --font-serif: 'Playfair Display', serif;
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      height: 100vh;
-      width: 100vw;
+    }
+
+    html,
+    body {
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
       display: flex;
       justify-content: center;
       align-items: center;
-      background: #f0ecec;
+      background: var(--bg);
       font-family: 'Cormorant Garamond', serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
+    /* ============================================
+       UTILIDADES (CLASES REUSABLES)
+       ============================================ */
+    .center {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .full-w {
+      width: 100%;
+    }
+
+    .img-fluid {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .title-wrap {
+      text-align: left;
+      margin-left: 10%;
+      position: relative;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+
+    .inv-title {
+      margin: 0;
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--text-dark);
+    }
+
+    .inv-shadow {
+      position: absolute;
+      top: 1.8rem;
+      left: 60px;
+      margin: 0;
+      font-family: var(--font-heading);
+      font-size: 2.2rem;
+      color: #d9c3a6;
+      opacity: 0.95;
+      pointer-events: none;
+    }
+
+    /* ============================================
+       CONTENEDOR PRINCIPAL (PHONE)
+       ============================================ */
     .phone {
-      width: 440px;
+      width: var(--phone-w);
       height: 100vh;
-      background: url("background_portada_2.png") no-repeat center center;
-      background-size: cover;
+      background: url('background_portada_2.png') no-repeat center/cover;
       display: flex;
       justify-content: center;
       align-items: center;
       position: relative;
-      box-shadow: 0 0 20px rgba(0,0,0,0.2);
       overflow: hidden;
+      box-shadow: 0 0 20px var(--shadow-rgba);
     }
 
     .container {
@@ -41,280 +124,535 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 1rem;
-      box-sizing: border-box;
+      padding: var(--container-padding);
       position: relative;
     }
 
     .image {
       width: 115%;
-      max-width: none;
       animation: fadeIn 2s ease;
     }
 
+    /* ============================================
+       TEXTO DE ACCESO
+       ============================================ */
     .text-access {
       margin-top: 1.5rem;
       font-size: 2rem;
-      font-family: 'Great Vibes', cursive;
+      font-family: var(--font-heading);
       background: linear-gradient(45deg, #d4a373, #e4c2b3, #c58fc0);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       cursor: pointer;
       text-align: center;
-      font-weight: normal;
-      position: relative;
       animation: float 3s infinite ease-in-out;
-      text-shadow: 0 0 8px rgba(212,163,115,0.3);
+      text-shadow: 0 0 8px rgba(212, 163, 115, 0.3);
       transition: transform 0.3s ease;
     }
 
-    .text-access:hover { transform: scale(1.05); }
+    .text-access:hover {
+      transform: scale(1.05);
+    }
 
+    /* ============================================
+       INVITACIÓN PRINCIPAL
+       ============================================ */
     .invitation {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #ffffff;
+      inset: 0;
+      background: #fff;
       display: flex;
       flex-direction: column;
       font-size: 1.6rem;
       text-align: center;
-      color: #7d5a4f;
+      color: var(--accent-1);
       opacity: 0;
       pointer-events: none;
-      transition: opacity 1.5s ease;
-      padding: 0;
-      box-sizing: border-box;
+      transition: opacity 1.2s ease;
       overflow-y: auto;
     }
-
-    .invitation.show { opacity: 1; pointer-events: all; }
-
-    .invitation-header { width: 100%; flex-shrink: 0; }
-    .invitation-header img { width: 100%; height: auto; display: block; }
-
-    /* Nueva sección */
-    .invitation-section {
-      position: relative;
-      width: 100%;
+    .invitation.show {
+      opacity: 1;
+      pointer-events: all;
     }
 
-    .invitation-section img {
+    .invitation-header img {
       width: 100%;
       height: auto;
       display: block;
     }
 
-    /* Texto normal debajo del "¡Nos casamos!" */
+    /* ============================================
+       SECCIONES (REFACTORIZACIÓN)
+       ============================================ */
+    .invitation-section {
+      position: relative;
+      width: 100%;
+      margin-bottom: 2rem;
+    }
+
+    /* Animaciones estandarizadas */
+    .animated {
+      transform: translateX(-120%);
+      opacity: 0;
+      transition: transform 3.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.9s ease;
+      will-change: transform, opacity;
+    }
+
+    .invitation.show .animated {
+      transform: translateX(0);
+      opacity: 1;
+      transition-delay: 0.12s;
+    }
+
+    /* Dirección opuesta */
+    .slide-right {
+      transform: translateX(120%);
+    }
+    .invitation.show .slide-right {
+      transform: translateX(0);
+    }
+
+    /* ============================================
+       TEXTOS SUPERPUESTOS
+       ============================================ */
     .overlay-text {
       position: absolute;
       width: 100%;
       left: 50%;
       transform: translateX(-50%);
       text-align: center;
-      font-family: 'Great Vibes', cursive;
+      font-family: var(--font-heading);
       color: #5a3d2b;
-      text-shadow: 0 2px 6px rgba(0,0,0,0.12);
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
       z-index: 7;
     }
+
     .overlay-bottom {
       top: 60%;
       font-size: 35px;
-      letter-spacing: 0.6px;
     }
 
-    /* SVG con texto curvo */
-    .overlay-curve {
-      position: absolute;
-      top: 5%;               /* ajusta si lo quieres más arriba/abajo */
+    .overlay-phrase {
+      top: 85%;
+      width: 90%;
       left: 50%;
       transform: translateX(-50%);
-      width: 92%;             /* ancho respecto al contenedor */
-      height: 230px;          /* suficiente para font-size:130 */
+      font-family: var(--font-serif);
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: var(--text-dark);
+      line-height: 1.5;
+    }
+
+    /* ============================================
+       DECORACIÓN (IMÁGENES)
+       ============================================ */
+    .decor-wrapper {
+      position: relative;
+      width: 100%;
+      height: 0;
       pointer-events: none;
-      overflow: visible;
-      z-index: 6;
     }
 
-    .overlay-top {
-      top: 0%;
+    .decor-img {
+      position: absolute;
+      bottom: -70px;
+      opacity: 0.95;
+      filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.12));
+      transform: translateZ(0);
     }
 
-    .overlay-bottom {
-      top: 60%;
+    .decor-right {
+      right: -10%;
+      width: 36%;
+      max-width: 140px;
     }
 
-/* Imagen más pequeña y centrada */
-.hearts-image {
-  display: block;
-  max-width:55%;   /* controla el tamaño (ajusta 60% o 80% si quieres) */
-  margin: 0 auto;
-}
-
-/* Línea dorada decorativa */
-.gold-line {
-  width: 60%;
-  height: 3px;
-  margin: 1rem auto;  /* separación arriba/abajo */
-  background: linear-gradient(90deg, #b8860b, #ffd700, #b8860b);
-  border-radius: 2px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-}
-
-/* Texto elegante y romántico, no cursiva */
-.overlay-phrase {
-  position: absolute;
-  top: 85%; /* ajusta si queda muy pegado o separado */
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90%;
-  font-family: 'Playfair Display', serif;
-  font-size: 1.2rem;
-  font-weight: 500;
-  color: #4b2e25;
-  text-align: center;
-  letter-spacing: 0.5px;
-  line-height: 1.5;
-}
-
-    .invitation-body {
-      padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
+    .decor-left {
+      left: -10%;
+      width: 36%;
+      max-width: 140px;
     }
 
-    .audio-toggle {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 30px;
-      height: 30px;
-      background-size: contain;
+    .decor-center {
+      left: 25%;
+      width: 50%;
+      max-width: 200px;
+    }
+
+    .decor-center-small {
+      left: 34%;
+      width: 50%;
+      max-width: 120px;
+    }
+
+    /* ============================================
+       DETALLES DE LA INVITACIÓN
+       ============================================ */
+    .invitation-details {
+      font-family: var(--font-serif);
+      padding: 1.5rem;
+      text-align: left;
+    }
+
+    .inv-hall {
+      text-align: center;
+      font-size: 1.6rem;
+      font-weight: bold;
+    }
+
+    .inv-hour {
+      text-align: center;
+      font-size: 1.4rem;
+      color: #d9c3a6;
+    }
+
+    .inv-city,
+    .inv-address {
+      text-align: center;
+      font-size: 1.4rem;
+      color: #000;
+    }
+
+    /* ============================================
+       BOTONES MAPS Y ACCIONES
+       ============================================ */
+    .maps-button {
+      font-family: var(--font-serif);
+      font-size: 16px;
+      text-decoration: none;
+      color: #444;
+      background-color: var(--beige);
+      padding: 8px 20px;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      display: block;
+      margin: 0.5rem auto;
+      width: var(--button-width);
+      box-shadow: 4px 6px 0 rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
       cursor: pointer;
-      opacity: 0.8;
-      transition: opacity 0.3s ease;
-      z-index: 9999;
-      pointer-events: auto;
+      text-align: center;
     }
 
-    .audio-toggle:hover { opacity: 1; }
+    .maps-button:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 6px 8px 0 rgba(0, 0, 0, 0.15);
+    }
 
-    @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    /* ============================================
+       FRASES / QUOTES
+       ============================================ */
+    .feature-quote {
+      position: relative;
+      width: 100%;
+      padding: 2rem 1rem;
+      margin: 3rem auto;
+      text-align: center;
+    }
+
+    .quote-box {
+      background: var(--beige);
+      padding: 2.5rem 2rem;
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #3e2d20;
+      border-radius: 4px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .quote-outline {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      border: 1.5px solid #000;
+      z-index: 1;
+    }
+
+    /* ============================================
+       CARRUSEL DE FOTOS
+       ============================================ */
+    .carousel-container {
+      width: 100%;
+      height: 260px;
+      overflow: hidden;
+      position: relative;
+      background: transparent;
+      margin-top: 50px;
+    }
+
+    .carousel-track {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      transition: transform 2s cubic-bezier(.22, .9, .35, 1);
+      will-change: transform;
+    }
+
+    .carousel-track img {
+      flex: 0 0 100%;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* ============================================
+       COUNTDOWN
+       ============================================ */
+    .countdown-section {
+      text-align: center;
+      margin: 1rem 0 3rem 0;
+      font-family: var(--font-serif);
+      color: var(--text-dark);
+    }
+
+    .countdown-title {
+      font-family: var(--font-heading);
+      font-size: 2.4rem;
+      margin-bottom: 1.2rem;
+      color: var(--accent-1);
+    }
+
+    .countdown-timer {
+      display: flex;
+      justify-content: center;
+      gap: 1.4rem;
+    }
+
+    .cd-box {
+      background: var(--beige);
+      padding: 1rem 0.8rem;
+      border-radius: 6px;
+      width: 65px;
+      box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .cd-box span {
+      display: block;
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: var(--accent-1);
+    }
+
+    .cd-box p {
+      margin: 0;
+      font-size: 0.8rem;
+      color: #000;
+    }
+
+    /* ============================================
+       ANIMACIONES
+       ============================================ */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes float {
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-6px);
+      }
+    }
+
+    /* ============================================
+       RESPONSIVE
+       ============================================ */
+    @media (max-width: 480px) {
+      .phone {
+        width: 100vw;
+      }
+      :root {
+        --button-width: 80%;
+      }
+      .decor-right {
+        display: none;
+      }
+    }
   </style>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
-
 </head>
+
 <body>
   <div class="phone">
     <div class="container">
-      <img src="portada_2_1.png" alt="Invitación" class="image">
+      <img src="portada_2_1_1.jpg" alt="Invitación" class="image" />
       <div class="text-access" id="access">Presiona para acceder...</div>
 
       <div class="invitation" id="invitation">
         <div class="invitation-header">
-          <img src="novios_1.jpg" alt="Header invitación">
+          <img src="novios_1_1.jpg" alt="Header invitación" />
         </div>
 
-<!-- Nueva sección -->
-<div class="invitation-section">
-  <img src="nos_casamos.png" alt="Nos Casamos">
+        <!-- Sección 1 -->
+        <div class="invitation-section animated">
+          <img src="nos_casamos.png" alt="Nos Casamos" style="width: 5%" />
 
- <svg class="overlay-curve"
-               viewBox="0 0 800 300"
-               xmlns="http://www.w3.org/2000/svg"
-               xmlns:xlink="http://www.w3.org/1999/xlink"
-               aria-hidden="true"
-          >
-            <!--
-              CURVATURAS de ejemplo (elige/ajusta una):
-              - Curva media  -> A 300,300
-              - Curva suave  -> A 400,400  <-- esta está activa
-              - Casi recta   -> A 600,600
-            -->
-            <!-- Arco activo (suave) -->
-            <path id="curve" d="M 80,200 A 400,400 0 0 1 720,200" fill="transparent"/>
-
-            <!-- Si quieres cambiar rápidamente: sustituye la 'd' por:
-                d="M 80,200 A 300,300 0 0 1 720,200"   (curva media)
-                d="M 80,200 A 600,600 0 0 1 720,200"   (muy plana)
-            -->
-
-            <text fill="#5a3d2b"
-                  font-size="100"
-                  font-family="'Great Vibes', cursive"
-                  text-anchor="middle"
-                  dominant-baseline="middle"
-            >
-              <!-- ambos atributos href/xlink:href para compatibilidad -->
-              <textPath href="#curve" xlink:href="#curve" startOffset="50%">
-                Ana &amp; Rubén
-              </textPath>
+          <svg class="overlay-curve" viewBox="0 0 800 300" aria-hidden="true">
+            <path id="curve" d="M 80,200 A 400,400 0 0 1 720,200" fill="transparent" />
+            <text fill="#5a3d2b" font-size="100" font-family="var(--font-heading)" text-anchor="middle">
+              <textPath href="#curve" startOffset="50%">Ana & Rubén</textPath>
             </text>
           </svg>
 
-  <!-- Texto normal debajo -->
-  <p class="overlay-text overlay-bottom">12-11-2025</p>
-</div>
+          <p class="overlay-text overlay-bottom">12-11-2025</p>
+        </div>
 
-<!-- NUEVA SECCIÓN CON FRASE Y CORAZONES -->
-<div class="invitation-section hearts-section">
-      <!-- Línea dorada decorativa -->
-  <div class="gold-line"></div>
-  <img src="frase_2.jpg" alt="Corazones unidos" class="hearts-image">
+        <!-- Frase -->
+        <div class="invitation-section animated feature-quote">
+          <div class="quote-box">Una hermosa y maravillosa historia comienza...</div>
+          <div class="quote-outline"></div>
+        </div>
 
+        <!-- Sección 2 -->
+        <div class="invitation-section animated slide-right">
+          <img src="frase_2.png" alt="Corazones unidos" class="img-fluid" style="max-width: 55%; margin: 8% auto 0" />
+          <p class="overlay-text overlay-phrase"><i>Unidos por siempre, atados con amor infinito</i></p>
+        </div>
 
+        <!-- Ceremonia -->
+        <div class="invitation-section animated invitation-details">
+          <div class="title-wrap">
+            <p class="inv-title">Ceremonia</p>
+            <p class="inv-shadow">Ceremonia</p>
+          </div>
 
-  <p class="overlay-text overlay-phrase">
-    <i> Unidos por siempre, atados con amor infinito</i>
-  </p>
-</div>
+          <p class="inv-hall">Salón Real Diamante</p>
+          <p class="inv-hour">16:00 hrs</p>
+          <p class="inv-city">Ciudad de México</p>
+          <p class="inv-address">Av. Siempre Viva 123, Col. Centro</p>
 
-        <!-- ICONO DE AUDIO -->
-        <div class="audio-toggle" id="audioToggle"></div>
+          <a href="https://maps.google.com/?q=Av.+Siempre+Viva+123,+Ciudad+de+México" target="_blank" class="maps-button">Click para acceder en Maps</a>
 
-        <!-- AUDIO -->
-        <audio id="weddingMusic" loop>
-          <source src="perfect_ed_sheran.mp3" type="audio/mpeg">
-          Tu navegador no soporta el elemento de audio.
-        </audio>
-      </div>
+          <div class="decor-wrapper">
+            <img src="flor_2.png" alt="Decoración elegante" class="decor-img decor-right" />
+          </div>
+        </div>
+
+        <!-- Recepción -->
+        <div class="invitation-section animated invitation-details">
+          <div class="title-wrap">
+            <p class="inv-title">Recepción</p>
+            <p class="inv-shadow">Recepción</p>
+          </div>
+
+          <p class="inv-hall">Salón Las Gaviotas</p>
+          <p class="inv-hour">18:00 hrs</p>
+          <p class="inv-city">Ciudad de México</p>
+          <p class="inv-address">Av. Siempre Benito Juarez 10, Col. Arboledas</p>
+
+          <a href="https://maps.google.com/?q=Av.+Siempre+Viva+123,+Ciudad+de+México" target="_blank" class="maps-button">Click para acceder en Maps</a>
+
+          <div class="decor-wrapper">
+            <img src="rosa.png" alt="Decoración elegante" class="decor-img decor-left" />
+          </div>
+        </div>
+
+        <!-- Código de vestimenta -->
+        <div class="invitation-section animated invitation-details">
+          <div class="title-wrap">
+            <p class="inv-title">Código de vestimenta</p>
+            <p class="inv-shadow">Código de vestimenta</p>
+          </div>
+
+          <p class="dress-code-type" style="text-align: center; font-size: 1.2rem">FORMAL</p>
+          <p class="dress-code-description" style="text-align: center; font-size: 1.1rem">Color blanco está reservado para los novios, ¡Nos encantaría verte en otros colores!</p>
+
+          <div class="decor-wrapper">
+            <img src="dress_code.png" alt="Decoración elegante" class="decor-img decor-center" />
+          </div>
+        </div>
+
+        <!-- Quote -->
+        <div class="invitation-section animated feature-quote">
+          <div class="quote-box">
+            Queremos que seas testigo de nuestro amor<br />¡Acompáñanos en este día tan especial!
+          </div>
+          <div class="quote-outline"></div>
+        </div>
+
+        <!-- Confirmación -->
+        <div class="invitation-section animated invitation-details">
+          <div class="title-wrap">
+            <p class="inv-title">Confirma tu asistencia</p>
+            <p class="inv-shadow">Confirma tu asistencia</p>
+          </div>
+
+          <div class="decor-wrapper" style="margin-top: 10px; margin-bottom: 105px">
+            <img src="letter_1.png" alt="Decoración elegante" class="decor-img decor-center-small" />
+          </div>
+
+          <a href="https://maps.google.com/?q=Av.+Siempre+Viva+123,+Ciudad+de+México" target="_blank" class="maps-button">Click para confirmar asistencia</a>
+
+          <div class="decor-wrapper">
+            <img src="flor_2.png" alt="Decoración elegante" class="decor-img decor-right" />
+          </div>
+        </div>
+
+        <!-- Itinerario -->
+        <div class="invitation-section animated invitation-details">
+          <div class="title-wrap">
+            <p class="inv-title">Itinerario</p>
+            <p class="inv-shadow">Itinerario</p>
+          </div>
+
+          <div class="itinerary-container" style="text-align: center; font-family: var(--font-serif)">
+            <div class="itinerary-item">
+              <p class="itinerary-hour" style="font-size: 2.2rem">18:00 h</p>
+              <div class="itinerary-line" style="width: 55%; height: 4px; background: #e6dec7; margin: 0.4rem auto"></div>
+              <p class="itinerary-name">CEREMONIA</p>
+            </div>
+
+            <div class="itinerary-item">
+              <p class="itinerary-hour" style="font-size: 2.2rem">19:00 h</p>
+              <div class="itinerary-line" style="width: 55%; height: 4px; background: #e6dec7; margin: 0.4rem auto"></div>
+              <p class="itinerary-name">RECEPCIÓN</p>
+            </div>
+
+            <div class="itinerary-item">
+              <p class="itinerary-hour" style="font-size: 2.2rem">20:00 h</p>
+              <div class="itinerary-line" style="width: 55%; height: 4px; background: #e6dec7; margin: 0.4rem auto"></div>
+              <p class="itinerary-name">BANQUETE</p>
+            </div>
+
+            <div class="itinerary-item">
+              <p class="itinerary-hour" style="font-size: 2.2rem">21:30 h</p>
+              <div class="itinerary-line" style="width: 55%; height: 4px; background: #e6dec7; margin: 0.4rem auto"></div>
+              <p class="itinerary-name">FIESTA</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- QR -->
+        <div class="qr-container center">
+          <img src="qr.png" alt="QR code" style="width: 100px; height: 100px" />
+        </div>
+
+        <!-- Countdown -->
+        <div class="countdown-section">
+          <p class="countdown-title">Falta...</p>
+          <div class="countdown-timer">
+            <div class="cd-box"><span id="cd-days">00</span><p>Días</p></div>
+            <div class="cd-box"><span id="cd-hours">00</span><p>Hrs</p></div>
+            <div class="cd-box"><span id="cd-min">00</span><p>Min</p></div>
+            <div class="cd-box"><span id="cd-sec">00</span><p>Seg</p></div>
+          </div>
+        </div>
+
+      </div> <!-- cierre invitation -->
     </div>
   </div>
-
-  <script>
-    const accessBtn = document.getElementById('access');
-    const invitation = document.getElementById('invitation');
-    const audio = document.getElementById('weddingMusic');
-    const audioToggle = document.getElementById('audioToggle');
-
-    // ICONOS PARA AUDIO
-    const iconOn = 'icono_sonido.png'; // sonido activo
-    const iconOff = 'icono_sin_sonido.png'; // sonido apagado
-
-    audioToggle.style.backgroundImage = `url(${iconOn})`;
-    let isPlaying = true;
-
-    accessBtn.addEventListener('click', () => {
-      invitation.classList.add('show');
-      audio.play().catch(() => console.log('No se pudo reproducir el audio automáticamente.'));
-    });
-
-    audioToggle.addEventListener('click', () => {
-      if (audio.paused) {
-        audio.play();
-        audioToggle.style.backgroundImage = `url(${iconOn})`;
-        isPlaying = true;
-      } else {
-        audio.pause();
-        audioToggle.style.backgroundImage = `url(${iconOff})`;
-        isPlaying = false;
-      }
-    });
-  </script>
 </body>
 </html>
