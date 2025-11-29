@@ -137,6 +137,41 @@
       box-sizing: border-box;
     }
 
+/* Transición ultra romántica para las secciones que aparecen con scroll */
+.invitation-section.scroll-hidden {
+  opacity: 0 !important;
+  transform: translateY(45px);  /* más desplazamiento para flotar */
+  filter: blur(6px);            /* toque soñador */
+  transition:
+    opacity 3s ease,
+    transform 3s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 3s ease;
+}
+
+.invitation-section.scroll-visible {
+  opacity: 1 !important;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+/* Estado inicial: imágenes ocultas desde la 3ª sección */
+.invitation-section.scroll-hidden img {
+  opacity: 0 !important;
+  transform: translateY(35px) scale(0.9);
+  filter: blur(10px);
+}
+
+/* Estado final: cuando la sección aparece */
+.invitation-section.scroll-visible img {
+  opacity: 1 !important;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+  transition:
+    opacity 2s ease,
+    transform 2s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 2s ease;
+}
+
     /* Motion classes kept to preserve behavior */
     .invitation-section.animated {
       transform: translateX(-120%);
@@ -160,7 +195,7 @@
       transform: translateX(0);
       opacity: 1;
       transition-delay: 0.12s;
-      margin-bottom: -2%
+      margin-bottom: 10%
     }
 
     .invitation-section img,
@@ -1144,6 +1179,39 @@ function updateCountdown() {
 
 setInterval(updateCountdown, 1000);
 updateCountdown();
+
+/* ===========================================
+   Scroll Reveal solo para secciones después de la 2
+   =========================================== */
+document.addEventListener("DOMContentLoaded", () => {
+  const sections = document.querySelectorAll(".invitation-section");
+
+  // Aplicar scroll-hidden SOLO a partir del índice 2
+  sections.forEach((sec, index) => {
+    if (index > 1) {
+      sec.classList.add("scroll-hidden");
+    }
+  });
+
+  const observer = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("scroll-visible");
+          entry.target.classList.remove("scroll-hidden");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      threshold: 0.50
+    }
+  );
+
+  sections.forEach((sec, index) => {
+    if (index > 1) observer.observe(sec);
+  });
+});
   </script>
 
 </body>
